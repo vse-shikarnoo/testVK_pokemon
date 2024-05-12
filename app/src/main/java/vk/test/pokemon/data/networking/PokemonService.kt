@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import vk.test.pokemon.BuildConfig
 import vk.test.pokemon.data.model.AbilityInfo
 import vk.test.pokemon.data.model.PokemonInfo
@@ -13,19 +14,22 @@ import vk.test.pokemon.data.model.PokemonInfo
 interface PokemonService {
 
     @GET("pokemon")
-    suspend fun getPokemons():PokemonSearchResponse
+    suspend fun getPokemons(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): PokemonSearchResponse
 
     @GET("pokemon/{id}")
     suspend fun getDetailPokemon(
-        @Path("id") id:String
-    ):PokemonInfo
+        @Path("id") id: String
+    ): PokemonInfo
 
     @GET("ability/{name}")
     suspend fun getAbilityInfo(
-        @Path("name") name:String
-    ):AbilityInfo
+        @Path("name") name: String
+    ): AbilityInfo
 
-    companion object{
+    companion object {
         fun create(): PokemonService {
             val okHttpClient = OkHttpClient.Builder()
                 .build()

@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
@@ -35,4 +37,32 @@ fun ImageView.loadUrl(url: String) {
         .build()
 
     imageLoader.enqueue(request)
+}
+
+abstract class PaginationScrollListener
+/**
+ * Supporting only LinearLayoutManager for now.
+ *
+ * @param layoutManager
+ */
+    (var layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+
+    abstract fun isLastPage(): Boolean
+
+    abstract fun isLoading(): Boolean
+
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        val visibleItemCount = layoutManager.childCount
+        val totalItemCount = layoutManager.itemCount
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+        if (!isLoading() && !isLastPage()) {
+            if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                loadMoreItems()
+            }//                    && totalItemCount >= ClothesFragment.itemsCount
+        }
+    }
+    abstract fun loadMoreItems()
 }

@@ -13,6 +13,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import vk.test.pokemon.R
 import vk.test.pokemon.databinding.FrPokemonListBinding
 import vk.test.pokemon.ui.adapter.PokemonListAdapter
+import vk.test.pokemon.utils.PaginationScrollListener
 import vk.test.pokemon.utils.autoCleared
 import vk.test.pokemon.vm.PokemonViewModel
 
@@ -24,12 +25,17 @@ class PokemonListFragment : Fragment(R.layout.fr_pokemon_list) {
 
     private var pokemonListAdapter: PokemonListAdapter by autoCleared()
 
+    private var isLastPage: Boolean = false
+    private var isLoading: Boolean = false
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
         observe()
+
+        pagination()
 
         viewModel.getPokemons()
         binding.retryButton.setOnClickListener {
@@ -91,5 +97,33 @@ class PokemonListFragment : Fragment(R.layout.fr_pokemon_list) {
                 }
             }
         }
+    }
+
+    private fun pagination(){
+        binding.list.addOnScrollListener(object : PaginationScrollListener(LinearLayoutManager(requireContext())) {
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+            override fun loadMoreItems() {
+                isLoading = true
+                //you have to call loadmore items to get more data
+                getMoreItems()
+            }
+        })
+    }
+
+    fun getMoreItems() {
+        //after fetching your data assuming you have fetched list in your
+        // recyclerview adapter assuming your recyclerview adapter is
+        //rvAdapter
+        isLoading = false
+
+        Log.d("TAG", "getMoreItems: $isLoading")
+        viewModel.getPokemons()
     }
 }

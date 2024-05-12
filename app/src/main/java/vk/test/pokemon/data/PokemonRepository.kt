@@ -9,15 +9,20 @@ class PokemonRepository {
 
     private val service = PokemonService.create()
 
+    private val limit = 30
+    private var offset = 0
+
     suspend fun getPokemons(): List<Pokemon> {
-        return service.getPokemons().results
+        val result = service.getPokemons(limit, offset).results
+        offset+=limit
+        return result
     }
 
-    suspend fun getDetailPokemon(id:String):PokemonInfo{
+    suspend fun getDetailPokemon(id: String): PokemonInfo {
         return service.getDetailPokemon(id)
     }
 
-    suspend fun getAbilityInfo(name:String): AbilityInfo{
+    suspend fun getAbilityInfo(name: String): AbilityInfo {
         return service.getAbilityInfo(name)
     }
 }
