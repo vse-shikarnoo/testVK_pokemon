@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pokemon</string>
+    <string name="retry">Retry</string>
+    <string name="no_results">No results</string>
+    <string name="gif_image">https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/%s.gif</string>
+    <string name="svg_image">https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/%s.svg</string>
+</resources>
